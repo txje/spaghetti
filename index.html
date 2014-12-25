@@ -45,6 +45,9 @@
       To view your own alignment file, simply drag and drop the file onto the dashed box below. The file will be loaded locally (not on our server) and displayed. You may also try our sample data by clicking on of the two (one large, one small) datasets below the drop box. Drag the sliders to adjust the edge filtering thresholds and the graph will be redrawn to reflect the new subset of edges.
       <br/>
       <br/>
+      For SAM files, partial query alignments are not common, so paired-end reads will be treated as one read, with each end used to create multiple alignments.
+      <br/>
+      <br/>
       Click the <span style="font-size:2em; line-height:30%; padding:0px;">+</span> in the upper right corner of this box to hide the tutorial.
     </div>
 
@@ -61,9 +64,9 @@
       Load sample data:
       <br/>
       <br/>
-      <div class="btn" onclick="load_file('pr_pr_bn32.m4')">E. coli K12 Pacbio self-assembly</div> <div class="help">(~60Mb, may load and display slowly on some computers)</div>
+      <div class="btn" onclick="load_file('data/pr_pr_bn32.m4')">E. coli K12 Pacbio self-assembly</div> <div class="help">(~60Mb, may load and display slowly on some computers)</div>
       <br/>
-      <div class="btn" onclick="load_file('35.jgi_scaffolds.m4')">Pseudomonas 35MFCv1.1 contig scaffolding</div>
+      <div class="btn" onclick="load_file('data/35.jgi_scaffolds.m4')">Pseudomonas 35MFCv1.1 contig scaffolding</div>
       <div id="status"></div> 
       <script>
         var state = document.getElementById('status');
