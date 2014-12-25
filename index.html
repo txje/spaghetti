@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<head>
+  <title>
+    m4 Alignment
+  </title>
+  <!-- jQuery -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+  <!-- jQuery UI -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+  <script src="js/arbor.js"></script>
+  <script src="js/arbor_interface.js"></script>
+
+  <script src="js/vivagraph.min.js"></script>
+  <script src="js/viva_interface.js"></script>
+
+  <script src="js/spaghetti.js"></script>
+  <script src="js/m4.js"></script>
+  <script src="js/maf.js"></script>
+  <script src="js/alignment_graph.js"></script>
+  <script src="js/alignment_viz.js"></script>
+
+  <link href='http://fonts.googleapis.com/css?family=Cutive+Mono' rel='stylesheet' type='text/css'>
+  <link href="css/spaghetti.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="centerer">
+    <h2 style="margin-bottom: 5px"><span style="font-size:1.4em">Spaghetti</span>: Visualizing alignments for sequence overlap assembly and scaffolding</h2>
+    <div class="bubble" style="background-color: #56A0D3; color: white;">Jeremy Wang, University of North Carolina at Chapel Hill</div>
+
+    <div class="bar">Tutorial<div style="float:right; cursor:pointer; display:inline-block; font-size:2em; line-height:30%; padding: 0px;" onclick="$('#tutorial').toggle()">+</div></div>
+    <div class="block" id="tutorial">
+      Spaghetti is a web-based visualization tool for visualizing sequencing read assembly and contig scaffolding. You can view edge-overlaps between segments and adjust alignment thresholds to help resolve the (hopefully linear) structure of adjacent pieces. Spaghetti is compatible with several common alignment formats, including:
+      <ul>
+        <li><a href="https://cgwb.nci.nih.gov/FAQ/FAQformat.html#format5">MAF</a> (output by LAST and others)</li>
+        <li>m4 (output by blasr)</li>
+        <li><a href="http://samtools.github.io/hts-specs/SAMv1.pdf">SAM</a> (output by Bowtie and others)</li>
+      </ul>
+      Spaghetti uses force-directed layout to iteratively improve the alignment graph layout. There are two modes which the visualization transitions seemlessly between depending on the size of the graph. For large graphs (&gt;1000 edges), a non-interactive but navigable graph is shown and the user may zoom in and out, and drag the viewport around to inspect the graph. For smaller graphs, the viewport is fixed but node (read/contig) labels may be shown, and individual nodes may be
+      dragged around. Additionally, if you click a node, all adjacent nodes (according to the edge filtering criteria) are highlighted, and successive nodes may be clicked to show the segment overlaps below.
+      <br/>
+      <br/>
+      To view your own alignment file, simply drag and drop the file onto the dashed box below. The file will be loaded locally (not on our server) and displayed. You may also try our sample data by clicking on of the two (one large, one small) datasets below the drop box. Drag the sliders to adjust the edge filtering thresholds and the graph will be redrawn to reflect the new subset of edges.
+      <br/>
+      <br/>
+      Click the <span style="font-size:2em; line-height:30%; padding:0px;">+</span> in the upper right corner of this box to hide the tutorial.
+    </div>
+
+    <div class="bar">m4 File</div>
+    <div class="block">
+      <div id="file_drop" style="border: 5px dashed #333333; width: 80%; height: 50px;">
+        <br/>
+        <span id="status" style="margin-left: 10px; font-weight: bold">Drop file here to load</span>
+      </div>
+      <br/>
+      -- or --
+      <br/>
+      <br/>
+      Load sample data:
+      <br/>
+      <br/>
+      <div class="btn" onclick="load_file('pr_pr_bn32.m4')">E. coli K12 Pacbio self-assembly</div> <div class="help">(~60Mb, may load and display slowly on some computers)</div>
+      <br/>
+      <div class="btn" onclick="load_file('35.jgi_scaffolds.m4')">Pseudomonas 35MFCv1.1 contig scaffolding</div>
+      <div id="status"></div> 
+      <script>
+        var state = document.getElementById('status');
+        var holder = document.getElementById('file_drop');
+
+        if (typeof window.FileReader === 'undefined') {
+          state.innerHTML = 'Your browser does not support local file reading';
+        } else {
+          //state.innerHTML = 'File API & FileReader available';
+        }
+         
+        holder.ondragover = function () { this.style.borderColor = '#009900'; return false; };
+        holder.ondragend = function () { this.style.borderColor = '#333333'; return false; };
+        holder.ondrop = function (e) {
+          this.style.borderColor = '#333333';
+          e.preventDefault();
+
+          var file = e.dataTransfer.files[0];
+          
+          console.log("File size: " + file.size);
+          if(file.size > 100000000) {
+            var doit = confirm("The file you are attempting to load is over 100Mb. This may cause your browser and computer to freeze. Do you wish to proceed?");
+            if (!doit) {
+              $("#status").text(file.name + " not loaded");
+              return false;
+            }
+          }
+
+          load_file(file);
+          return false;
+        };
+      </script>
+    </div>
+
+    <div class="warning bubble" id="warning"></div>
+
+    <div class="bar">Overlap graph</div>
+    <div class="block" id="graph_block" style="display:none">
+
+      Overlap identity (%): <span id="identity">98</span>
+      <div style="margin-left: 10px; display:inline-block; width: 800px">
+        <div id="identity_slider" style="margin-bottom: 5px"></div>
+      </div>
+
+      <br/>
+      <br/>
+
+      Overlap length (bp): <span id="overlap">0</span>
+      <div style="margin-left: 10px; display:inline-block; width: 800px">
+        <div id="overlap_slider" style="margin-bottom: 5px"></div>
+      </div>
+
+      <br/>
+      <br/>
+
+      <input type="checkbox" id="edges" checked onclick="$('#edge_slider_box').toggle(); update();"> Restrict overlap to edges</input>
+      <div id="edge_slider_box">
+        Edge aligned threshold (bp): <span id="edge_threshold">50</span>
+        <div style="margin-left: 10px; display:inline-block; width: 800px">
+          <div id="edge_threshold_slider" style="margin-bottom: 5px"></div>
+        </div>
+      </div>
+
+      <br/>
+      <br/>
+
+      <div id="viva_help">
+        <div>Large view/Performance mode</div>
+        <div class="help" id="graph_help">Scroll to zoom in/out. Click and drag to move viewport.</div>
+      </div>
+      <div id="arbor_help">
+        <div>Small view/Interactive mode</div>
+        <div class="help" id="graph_help">Click nodes to view adjacencies. Click successive nodes to view overlap. Drag nodes to rearrange.</div>
+        <br/>
+        <div>
+          <input type="checkbox" id="labels" onclick="graph.redraw()"> Show node labels</input>
+        </div>
+      </div>
+      <br/>
+      <div id="viva_container" style="width:900px; height:500px; border: 1px solid #333333; display:none;"></div>
+      <div id="arbor_container" style="width:900px; height:500px; border: 1px solid #333333; display:none;">
+        <canvas id='arbor_canvas' width=900 height=500 style='width: 900px; height:500px;'></canvas>
+      </div>
+    </div>
+
+    <div class="bar">Alignment pileup</div>
+    <div class="block" id="alignment_block" style="display:none">
+      <div>
+        <canvas id="alignment" width=1000 height=250 style="width: 900px; height:250px;"></canvas>
+      </div>
+    </div>
+
+    <div class="bubble" style="background-color: #55FF55">
+      HELP! - Bugs, issues, questions, comments, and suggestions are welcome on our <a href="http://github.com/txje/spaghetti">github page</a>.
+      <br/>
+      <br/>
+      &copy; Copyright 2014, Jeremy Wang
+    </div>
+  </div>
+
+</body>
+</html>

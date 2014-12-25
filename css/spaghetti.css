@@ -1,0 +1,50 @@
+body {
+  font-family: "Cutive Mono", monospace;
+  background-color: #FFFFFF;
+  color: #333333;
+}
+
+div.centerer {
+  width: 1000px;
+  margin: auto;
+}
+
+div.block {
+  padding: 10px;
+  background-color: #DDDDDD;
+}
+
+div.bar {
+  background-color: #333333;
+  color: #DDDDDD;
+  margin-top: 20px;
+  padding: 5px;
+}
+
+div.help {
+  color: #777777;
+  font-size: 0.8em;
+}
+
+div.btn {
+  cursor: pointer;
+  padding: 5px;
+  background: none;
+  border-radius: 3px;
+  border: 1px solid #333333;
+  font-family: inherit;
+  display: inline-block;
+}
+
+div.warning {
+  background-color: #AAAA00;
+  color: #000000;
+  display: none;
+}
+
+div.bubble {
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
