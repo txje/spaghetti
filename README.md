@@ -1,3 +1,6 @@
+Spaghetti: Visualizing alignment graphs for sequence overlap assembly and scaffolding
+=====================================================================================
+
 Use live tool: [http://txje.github.io/spaghetti](http://txje.github.io/spaghetti)
 
 Spaghetti is a web-based visualization tool for visualizing sequencing read assembly and contig scaffolding. You can view edge-overlaps between segments and adjust alignment  thresholds to help resolve the (hopefully linear) structure of adjacent pieces. Spaghetti is compatible with several common alignment formats, including:
@@ -20,3 +23,11 @@ Spaghetti visualization of [E. coli K12 PacBio self-assembly] (http://nbviewer.i
 Spaghetti was developed by Jeremy Wang at the University of North Carolina at Chapel Hill.
 
 If you have questions, comments, problems, or suggestions, create an issue or pull request and we will look into it.
+
+
+Praise for Spaghetti 
+--------------------
+
+"it’s more beautiful than i ever imagined"
+  - Matt H.
+(elicited under duress)

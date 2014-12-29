@@ -208,6 +208,7 @@ function nodeSelected(node) {
     drawAlignment(first_clicked_read, second_clicked_read, alignment_graph.filtered_edges);
   } else { // any non-adjacent read becomes new 1st read
     first_clicked_read = read;
+    second_clicked_read = null;
     adjacencies = alignment_graph.adjacencies(read);
   }
 }

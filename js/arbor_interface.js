@@ -81,6 +81,7 @@ function ArborGrapher($canvas) {
           // pt:   {x:#, y:#}  node position in screen coords
 
           var w = 10;
+          /*
           if(node.name == first_clicked_read) {
             ctx.fillStyle = "green";
           } else if(node.name == second_clicked_read) {
@@ -88,11 +89,32 @@ function ArborGrapher($canvas) {
           } else if(adjacencies.indexOf(node.name) > -1) {
             ctx.fillStyle = "#33FF33";
           } else {
-            ctx.fillStyle = "blue";
-          }
+          */
+          ctx.fillStyle = "blue";
+          //}
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, w/2, 0, 2*Math.PI);
           ctx.fill();
+
+          // circle clicked/adjacent nodes
+          ctx.strokeStyle = "blue";
+          if(node.name == first_clicked_read) {
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, w/2 + 4, 0, 2*Math.PI);
+            ctx.stroke();
+          } else if(node.name == second_clicked_read) {
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, w/2 + 4, 0, 2*Math.PI);
+            ctx.stroke();
+          } else if(adjacencies.indexOf(node.name) > -1) {
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, w/2 + 4, 0, 2*Math.PI);
+            ctx.stroke();
+          }
+
           if($("#labels").prop("checked") && node.name.indexOf("scaffold") > -1) {
             ctx.fillStyle = "black";
             ctx.font = 'italic 11px sans-serif';
