@@ -66,7 +66,6 @@ function file_loaded(fname, content, success) {
     }
     $("#status").text("Creating alignment graph...");
     console.log("Creating alignment graph...");
-    console.log(edges);
     alignment_graph = new AlignmentGraph(edges);
     $("#status").text(fname + " loaded");
     console.log(fname + " loaded");

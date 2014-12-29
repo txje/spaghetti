@@ -1,0 +1,26 @@
+##maf version=1 
+# test, made-up data only
+                    
+a score=5062.0                    
+s contig0    500 500 + 1000 TAAAGA
+s contig1 0 500 + 1000 TAAAGA
+
+a score=4000.0
+s contig1    500 500 + 1000 gcagctgaaaaca
+s contig2 0 500 + 1000 gcagctgaaaaca
+
+a score=3000.0
+s contig2    500 500 + 1000 gcagctgaaaaca
+s contig3 0 500 + 1000 gcagctgaaaaca
+
+a score=2000.0
+s contig3    500 500 + 1000 gcagctgaaaaca
+s contig4 0 500 + 1000 gcagctgaaaaca
+
+a score=1000.0
+s contig4    500 500 + 1000 gcagctgaaaaca
+s contig5 0 500 + 1000 gcagctgaaaaca
+
+a score=23262.0     
+s contig5    500 500 + 1000 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
+s contig0 0 500 + 1000 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG
