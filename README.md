@@ -10,6 +10,10 @@ To view your own alignment file, simply drag and drop the file onto the dashed b
 
 For SAM files, partial query alignments are not common, so paired-end reads will be treated as one read, with each end used to create multiple alignments.
 
+Spaghetti visualization of [E. coli K12 PacBio self-assembly] (http://nbviewer.ipython.org/github/cschin/Write_A_Genome_Assembler_With_IPython/blob/master/Write_An_Assembler.ipynb)
+
+![Screenshot](data/screenshot.png)
+
 
 Spaghetti was developed by Jeremy Wang at the University of North Carolina at Chapel Hill.
 

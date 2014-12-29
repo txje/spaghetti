@@ -33,6 +33,7 @@
 
     <div class="bar">Tutorial<div style="float:right; cursor:pointer; display:inline-block; font-size:2em; line-height:30%; padding: 0px;" onclick="$('#tutorial').toggle()">+</div></div>
     <div class="block" id="tutorial">
+      <h2>Overview</h2>
       Spaghetti is a web-based visualization tool for visualizing sequencing read assembly and contig scaffolding. You can view edge-overlaps between segments and adjust alignment thresholds to help resolve the (hopefully linear) structure of adjacent pieces. Spaghetti is compatible with several common alignment formats, including:
       <ul>
         <li><a href="https://cgwb.nci.nih.gov/FAQ/FAQformat.html#format5">MAF</a> (output by LAST and others)</li>
@@ -46,7 +47,61 @@
       To view your own alignment file, simply drag and drop the file onto the dashed box below. The file will be loaded locally (not on our server) and displayed. You may also try our sample data by clicking on of the two (one large, one small) datasets below the drop box. Drag the sliders to adjust the edge filtering thresholds and the graph will be redrawn to reflect the new subset of edges.
       <br/>
       <br/>
-      For SAM files, partial query alignments are not common, so paired-end reads will be treated as one read, with each end used to create multiple alignments.
+      For SAM files, paired-end reads are used as a scaffold to create edges between reference fragments.
+      <br/>
+      <br/>
+      <h2>Parameters</h2>
+      Spaghetti is primarily designed to help you determine an appropriate set of parameters to properly assemble aligned sequence fragments.
+      <br/>
+      <ul>
+        <li><span style="font-style:italic">Overlap identity</span>: Percent of base-pair matches within the overlapping region of two fragments</li>
+        <li><span style="font-style:italic">Overlap length</span>: Number of base-pairs overlapping between two fragments</li>
+        <li><span style="font-style:italic">Edge aligned threshold</span>: If 'Restrict overlap to edges' is checked, the number of base-pairs allowed between the aligned region and the proximal or distal end of each fragment</li>
+      </ul>
+      Here's an example:
+      <br/>
+      <svg width="900" height="160">
+        <g transform="translate(10,10)">
+          <rect x="0" y="0" width="460" height="25" style="fill:rgb(255,255,255); stroke-width:2; stroke:rgb(0,0,255)" />
+          <text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGGGCCTT </text>
+        </g>
+        <g transform="translate(370,35)">
+          <text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > |||| || | </text>
+        </g>
+        <g transform="translate(350,60)">
+          <rect x="0" y="0" width="460" height="25" style="fill:rgb(255,255,255); stroke-width:2; stroke:rgb(0,0,255)" />
+          <text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > ACACGGTCC-TGTACGTACGTACGTACGTACGTACGTACGTACGT </text>
+        </g>
+        <g transform="translate(376,3)">
+          <rect x="0" y="0" width="90" height="90" style="stroke:rgb(0,200,0); stroke-width:2; fill:rgba(255,255,255,0);" />
+        </g>
+        <g transform="translate(372,105)">
+          <line x1="4" y1="0" x2="4" y2="8" style="stroke:rgb(0,0,0);stroke-width:2" />
+          <line x1="4" y1="4" x2="94" y2="4" style="stroke:rgb(0,0,0);stroke-width:2" />
+          <line x1="94" y1="0" x2="94" y2="8" style="stroke:rgb(0,0,0);stroke-width:2" />
+        </g>
+        <g transform="translate(352,95)">
+          <line x1="4" y1="0" x2="4" y2="8" style="stroke:rgb(0,0,0);stroke-width:2" />
+          <line x1="4" y1="4" x2="24" y2="4" style="stroke:rgb(0,0,0);stroke-width:2" />
+          <line x1="24" y1="0" x2="24" y2="8" style="stroke:rgb(0,0,0);stroke-width:2" />
+        </g>
+        <line x1="364" y1="99" x2="364" y2="110" style="stroke:rgb(0,0,0);stroke-width:1" />
+        <line x1="364" y1="110" x2="250" y2="110" style="stroke:rgb(0,0,0);stroke-width:1" />
+        <line x1="250" y1="110" x2="250" y2="130" style="stroke:rgb(0,0,0);stroke-width:1" />
+        <text x="100" y="130" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > Edge aligned threshold: 2 </text>
+
+        <line x1="419" y1="109" x2="419" y2="120" style="stroke:rgb(0,0,0);stroke-width:1" />
+        <line x1="419" y1="120" x2="500" y2="120" style="stroke:rgb(0,0,0);stroke-width:1" />
+        <line x1="500" y1="120" x2="500" y2="130" style="stroke:rgb(0,0,0);stroke-width:1" />
+        <text x="430" y="130" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > Overlap length: 9 </text>
+        <text x="430" y="145" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > Overlap identity: 78% (7/9)</text>
+      </svg>
+      <br/>
+      <br/>
+      <h2>Sample Data Screenshot</h2>
+      Below is a screenshot of the Spaghetti visualization of the E. coli K12 PacBio self-assembly, which resolves the corrected PacBio reads into a single circular genome. To view the interactive graph, click to load the E. coli sample data below. These data and PacBio self-correction and assembly methods described by Jason Chin of Pacific Biosciences <a href="http://nbviewer.ipython.org/github/cschin/Write_A_Genome_Assembler_With_IPython/blob/master/Write_An_Assembler.ipynb">here</a>.
+      <br/>
+      <center><img src="data/screenshot.png"/></center>
       <br/>
       <br/>
       Click the <span style="font-size:2em; line-height:30%; padding:0px;">+</span> in the upper right corner of this box to hide the tutorial.
