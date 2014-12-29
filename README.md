@@ -1,3 +1,5 @@
+Use live tool: [http://txje.github.io/spaghetti](http://txje.github.io/spaghetti)
+
 Spaghetti is a web-based visualization tool for visualizing sequencing read assembly and contig scaffolding. You can view edge-overlaps between segments and adjust alignment  thresholds to help resolve the (hopefully linear) structure of adjacent pieces. Spaghetti is compatible with several common alignment formats, including:
 
 -  [MAF](https://cgwb.nci.nih.gov/FAQ/FAQformat.html#format5) (output by LAST and others)</li>
