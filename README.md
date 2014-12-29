@@ -10,7 +10,7 @@ To view your own alignment file, simply drag and drop the file onto the dashed b
 
 For SAM files, partial query alignments are not common, so paired-end reads will be treated as one read, with each end used to create multiple alignments.
 
-Spaghetti visualization of [E. coli K12 PacBio self-assembly] (http://nbviewer.ipython.org/github/cschin/Write_A_Genome_Assembler_With_IPython/blob/master/Write_An_Assembler.ipynb)
+Spaghetti visualization of [E. coli K12 PacBio self-assembly] (http://nbviewer.ipython.org/github/cschin/Write_A_Genome_Assembler_With_IPython/blob/master/Write_An_Assembler.ipynb) early in its force-directed layout resolution.
 
 ![Screenshot](data/screenshot.png)
 
