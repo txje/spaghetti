@@ -25,7 +25,7 @@ var graph, arbor_graph, viva_graph;
  */
 
 function load_file(file) {
-  $("#graph_block").hide();
+  $("#graph_box").hide();
   if (!file) {
     return null;
   }
@@ -116,12 +116,14 @@ function update(event, ui) {
   if(alignment_graph.num_edges < 1000) {
     $("#arbor_container").show();
     $("#viva_container").hide();
+    $("#alignment_box").show();
     graph = arbor_graph;
     $("#arbor_help").show();
     $("#viva_help").hide();
   } else if (webgl_enabled) {
     $("#arbor_container").hide();
     $("#viva_container").show();
+    $("#alignment_box").hide();
     graph = viva_graph;
     $("#arbor_help").hide();
     $("#viva_help").show();
@@ -129,7 +131,7 @@ function update(event, ui) {
     warn("You are attempting to render too many edges (" + alignment_graph.num_edges + ") and your browser does not support fast WebGL rendering. Try using a modern WebGl-enabled browser, use a smaller file, or more restrictive filters");
     return;
   }
-  $("#graph_block").show();
+  $("#graph_box").show();
   if (!graph.running) {
     graph.init();
   }
@@ -148,6 +150,25 @@ function warn(txt) {
 
 // ----- init -----
 $(function () {
+
+  /*
+   * Create tutorial image (SVG)
+   */
+
+  //<text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono; font-size:14px;" > ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGGGCCTT </text>
+  var $top = $("#svg_top_seq");
+  var top_seq = "ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGGGCCTT";
+  drawSVGseq($top, top_seq);
+
+  //<text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono; font-size:14px;" > ACACGGTCC-TGTACGTACGTACGTACGTACGTACGTACGTACGT </text>
+  var $bottom = $("#svg_bottom_seq");
+  var bottom_seq = "ACACGGTCC-TGTACGTACGTACGTACGTACGTACGTACGTACGT";
+  drawSVGseq($bottom, bottom_seq);
+
+  //<text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono; font-size:14px;" > |||| || | </text>
+  var aln = "|||| || |";
+  var $aln = $("#svg_alignment");
+  drawSVGseq($aln, aln);
 
   /*
    * Create both graph drivers, will sit inactive until needed
@@ -213,3 +234,19 @@ function nodeSelected(node) {
   }
 }
 
+function drawSVGseq(root, seq) {
+  var NS = "http://www.w3.org/2000/svg";
+
+  var char_width = 10;
+
+  for(var s = 0; s < seq.length; s++) {
+    var txt = $(document.createElementNS(NS, "text"));
+    txt.attr("x", 6+(s*char_width));
+    txt.attr("y", 6);
+    txt.attr("alignment-baseline", "hanging");
+    txt.css("fill", "#000000");
+    txt.css("font-size", "14px");
+    txt.text(seq.charAt(s));
+    root.append(txt);
+  }
+}

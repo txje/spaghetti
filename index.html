@@ -60,17 +60,14 @@
       </ul>
       Here's an example:
       <br/>
-      <svg width="900" height="160">
-        <g transform="translate(10,10)">
+      <svg id="tutorial_img" width="900" height="160">
+        <g id="svg_top_seq" transform="translate(10,10)">
           <rect x="0" y="0" width="460" height="25" style="fill:rgb(255,255,255); stroke-width:2; stroke:rgb(0,0,255)" />
-          <text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGGGCCTT </text>
         </g>
-        <g transform="translate(370,35)">
-          <text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > |||| || | </text>
+        <g id="svg_alignment" transform="translate(370,35)">
         </g>
-        <g transform="translate(350,60)">
+        <g id="svg_bottom_seq" transform="translate(350,60)">
           <rect x="0" y="0" width="460" height="25" style="fill:rgb(255,255,255); stroke-width:2; stroke:rgb(0,0,255)" />
-          <text x="6" y="6" alignment-baseline="hanging" style="fill:rgb(0,0,0); font-family:Cutive Mono;" > ACACGGTCC-TGTACGTACGTACGTACGTACGTACGTACGTACGT </text>
         </g>
         <g transform="translate(376,3)">
           <rect x="0" y="0" width="90" height="90" style="stroke:rgb(0,200,0); stroke-width:2; fill:rgba(255,255,255,0);" />
@@ -107,7 +104,7 @@
       Click the <span style="font-size:2em; line-height:30%; padding:0px;">+</span> in the upper right corner of this box to hide the tutorial.
     </div>
 
-    <div class="bar">m4 File</div>
+    <div class="bar">Load File</div>
     <div class="block">
       <div id="file_drop" style="border: 5px dashed #333333; width: 80%; height: 50px;">
         <br/>
@@ -117,7 +114,12 @@
       -- or --
       <br/>
       <br/>
-      Load sample data:
+      Click the <span style="font-size:2em; line-height:30%; padding:0px;">+</span> below to load sample data.
+    </div>
+
+    <div class="bar">Sample Data<div style="float:right; cursor:pointer; display:inline-block; font-size:2em; line-height:30%; padding: 0px;" onclick="$('#sample_data').toggle()">+</div></div>
+    <div class="block" id="sample_data" style="display:none">
+      Click one to load sample data:
       <br/>
       <br/>
       <div class="btn" onclick="load_file('data/pr_pr_bn32.m4');">E. coli K12 Pacbio self-assembly</div>
@@ -162,59 +164,63 @@
 
     <div class="warning bubble" id="warning"></div>
 
-    <div class="bar">Overlap graph</div>
-    <div class="block" id="graph_block" style="display:none">
+    <div id="graph_box" style="display:none">
+      <div class="bar">Overlap graph</div>
+      <div class="block">
 
-      Overlap identity (%): <span id="identity">98</span>
-      <div style="margin-left: 10px; display:inline-block; width: 800px">
-        <div id="identity_slider" style="margin-bottom: 5px"></div>
-      </div>
-
-      <br/>
-      <br/>
-
-      Overlap length (bp): <span id="overlap">0</span>
-      <div style="margin-left: 10px; display:inline-block; width: 800px">
-        <div id="overlap_slider" style="margin-bottom: 5px"></div>
-      </div>
-
-      <br/>
-      <br/>
-
-      <input type="checkbox" id="edges" checked onclick="$('#edge_slider_box').toggle(); update();"> Restrict overlap to edges</input>
-      <div id="edge_slider_box">
-        Edge aligned threshold (bp): <span id="edge_threshold">50</span>
+        Overlap identity (%): <span id="identity">98</span>
         <div style="margin-left: 10px; display:inline-block; width: 800px">
-          <div id="edge_threshold_slider" style="margin-bottom: 5px"></div>
+          <div id="identity_slider" style="margin-bottom: 5px"></div>
         </div>
-      </div>
 
-      <br/>
-      <br/>
-
-      <div id="viva_help">
-        <div>Large view/Performance mode</div>
-        <div class="help" id="graph_help">Scroll to zoom in/out. Click and drag to move viewport.</div>
-      </div>
-      <div id="arbor_help">
-        <div>Small view/Interactive mode</div>
-        <div class="help" id="graph_help">Click nodes to view adjacencies. Click successive nodes to view overlap. Drag nodes to rearrange.</div>
         <br/>
-        <div>
-          <input type="checkbox" id="labels" onclick="graph.redraw()"> Show node labels</input>
+        <br/>
+
+        Overlap length (bp): <span id="overlap">0</span>
+        <div style="margin-left: 10px; display:inline-block; width: 800px">
+          <div id="overlap_slider" style="margin-bottom: 5px"></div>
         </div>
-      </div>
-      <br/>
-      <div id="viva_container" style="width:900px; height:500px; border: 1px solid #333333; display:none;"></div>
-      <div id="arbor_container" style="width:900px; height:500px; border: 1px solid #333333; display:none;">
-        <canvas id='arbor_canvas' width=900 height=500 style='width: 900px; height:500px;'></canvas>
+
+        <br/>
+        <br/>
+
+        <input type="checkbox" id="edges" checked onclick="$('#edge_slider_box').toggle(); update();"> Restrict overlap to edges</input>
+        <div id="edge_slider_box">
+          Edge aligned threshold (bp): <span id="edge_threshold">50</span>
+          <div style="margin-left: 10px; display:inline-block; width: 800px">
+            <div id="edge_threshold_slider" style="margin-bottom: 5px"></div>
+          </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div id="viva_help">
+          <div>Large view/Performance mode</div>
+          <div class="help" id="graph_help">Scroll to zoom in/out. Click and drag to move viewport.</div>
+        </div>
+        <div id="arbor_help">
+          <div>Small view/Interactive mode</div>
+          <div class="help" id="graph_help">Click nodes to view adjacencies. Click successive nodes to view overlap. Drag nodes to rearrange.</div>
+          <br/>
+          <div>
+            <input type="checkbox" id="labels" onclick="graph.redraw()"> Show node labels</input>
+          </div>
+        </div>
+        <br/>
+        <div id="viva_container" style="width:900px; height:500px; border: 1px solid #333333; display:none;"></div>
+        <div id="arbor_container" style="width:900px; height:500px; border: 1px solid #333333; display:none;">
+          <canvas id='arbor_canvas' width=900 height=500 style='width: 900px; height:500px;'></canvas>
+        </div>
       </div>
     </div>
 
-    <div class="bar">Alignment pileup</div>
-    <div class="block" id="alignment_block" style="display:none">
-      <div>
-        <canvas id="alignment" width=1000 height=250 style="width: 900px; height:250px;"></canvas>
+    <div id="alignment_box" style="display:none">
+      <div class="bar">Alignment pileup</div>
+      <div class="block">
+        <div>
+          <canvas id="alignment" width=1000 height=250 style="width: 900px; height:250px;"></canvas>
+        </div>
       </div>
     </div>
 
