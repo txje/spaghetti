@@ -195,7 +195,9 @@ function Edge(qname, qstrand, qstart, qend, qlen, tname, tstrand, tstart, tend, 
   this.weight = this.match / (this.query.length + this.target.length) * 100;
   this.overlap = (this.query.alignedLength < this.target.alignedLength ? this.query.alignedLength : this.target.alignedLength);
   
-  this.toString = function(self) {
+  /*
+  this.toString = function() {
     return "q " + this.query.alignStart + ":" + this.query.alignEnd + " <-> t " + this.target.alignStart + ":" + this.target.alignEnd + " (matches: " + this.match + ")"
   }
+  */
 }

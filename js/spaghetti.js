@@ -29,7 +29,16 @@ function load_file(file) {
   if (!file) {
     return null;
   }
-  if (typeof file == "string") {
+  if(file == "data/pr_pr_bn32.m4") {
+    // short-circuit loading this file, since it may take a long time over github (it takes just a couple seconds to load locally on a standard desktop)
+    $.getJSON("data/pr_pr_bn32.json", null, function(data, status) {
+      if(status == "success") {
+        file_loaded(file, data, true);
+      } else {
+        file_loaded(file, null, false);
+      }
+    });
+  } else if (typeof file == "string") {
     $("#status").text("Loading sample file '" + file + "'...");
     $.get(file, {}, function(data, textStatus) {
       if(textStatus != "success") {
@@ -57,12 +66,18 @@ function file_loaded(fname, content, success) {
     $("#status").text("Reading " + file_type + " file...");
     console.log("Reading " + file_type + " file...");
     var edges;
-    if (file_type == "m4") {
-      edges = m4(content);
-    } else if (file_type == "maf") {
-      edges = maf(content);
-    } else if (file_type == "sam") {
-      edges = sam(content);
+    if(fname == "data/pr_pr_bn32.m4") {
+      // short-circuit loading this file, since it may take a long time over github (it takes just a couple seconds to load locally on a standard desktop)
+      // $.getJSON loaded and parsed JSON already
+      edges = content["edges"];
+    } else {
+      if (file_type == "m4") {
+        edges = m4(content);
+      } else if (file_type == "maf") {
+        edges = maf(content);
+      } else if (file_type == "sam") {
+        edges = sam(content);
+      }
     }
     $("#status").text("Creating alignment graph...");
     console.log("Creating alignment graph...");
@@ -85,6 +100,18 @@ function update(event, ui) {
   alignment_graph.overlap = parseInt($("#overlap").text());
   alignment_graph.edge_dist = ($("#edges").prop("checked") ? parseInt($("#edge_threshold").text()) : null);
   alignment_graph.filter();
+
+  /*
+   * This will save the filtered edges as a loadable JSON file
+   * IF there are few enough edges
+   * OTHERWISE it will just crash your browser
+   * Godspeed.
+   *
+  var data = JSON.stringify({"edges":alignment_graph.filtered_edges});
+  var url = 'data:text/json;charset=utf8,' + encodeURIComponent(data);
+  window.open(url, '_blank');
+  window.focus();
+   */
 
   if(alignment_graph.num_edges < 1000) {
     $("#arbor_container").show();
